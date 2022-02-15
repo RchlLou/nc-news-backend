@@ -23,5 +23,48 @@
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves the unique article as an object",
+    "query": "article_id: 1",
+    "exampleResponse":  {
+      "article_id": 
+        {
+          "author": "butter_bridge",
+          "title": "Living in the shadow...",
+          "article_id": 1,
+          "body": "I find this existence...",
+          "topic": "mitch",
+          "created_at": "2020-07-09T21:11:00.000Z",
+          "votes": 100,
+          "comment_count": 10
+        }
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updates votes key and serves back article ID data",
+    "query": { "inc_votes" : 1 },
+    "exampleResponse":  {
+      "article_id":
+        {
+          "article_id": 1,
+          "title": "Living in the shadow of a great man",
+          "body": "I find this existence challenging",
+          "votes": 101,
+          "topic": "mitch",
+          "author": "butter_bridge",
+          "created_at": "2020-07-10T04:11:00.000Z",
+          "comment_count": 11
+        }
+    }  
   }
+
+
+
+
+
+  
 }
+
+
+
