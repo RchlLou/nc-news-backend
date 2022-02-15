@@ -28,7 +28,7 @@
     "description": "serves the unique article as an object",
     "query": "article_id: 1",
     "exampleResponse":  {
-      "article_id": 
+      "articleInfo": 
         {
           "author": "butter_bridge",
           "title": "Living in the shadow...",
