@@ -16,7 +16,6 @@ describe("TOPIC ENDPOINTS", () => {
         .expect(200)
         .then(({ body }) => {
           const { topics } = body;
-          expect(body).toHaveProperty("topics");
           expect(Array.isArray(topics)).toBe(true);
           expect(topics).toHaveLength(3);
           topics.forEach((topic) => {
@@ -32,7 +31,7 @@ describe("TOPIC ENDPOINTS", () => {
   });
 });
 
-describe("ERRORS", () => {
+describe("GLOBAL ERRORS", () => {
   it("STATUS 404: Tests unrecognised endpoints and responds with status 404 - Endpoint not found", () => {
     return request(app)
       .get(`/UNRECOGNISED-PATH`)
