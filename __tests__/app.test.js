@@ -75,7 +75,7 @@ describe("ARTICLE ENDPOINTS", () => {
           ]);
         });
     });
-    test("STATUS 400: Bad request - Tests for valid requests but return no data", () => {
+    test("STATUS 400: Bad request - Tests for valid requests but returns no data", () => {
       return request(app)
         .get("/api/articles/NOT-AN-ID")
         .expect(400)
@@ -93,8 +93,7 @@ describe("ARTICLE ENDPOINTS", () => {
     });
   });
   describe("PATCH /api/articles/:article_id", () => {
-    test("STATUS 200: Sends back the updated article with correct key value pairs", () => {
-      const article_id = 1;
+    test("STATUS 200: TESTS POSITIVE INTERGER VOTES. Sends back the updated article with correct key value pairs", () => {
       const articleUpdates = {
         inc_votes: 1,
       };
@@ -106,7 +105,7 @@ describe("ARTICLE ENDPOINTS", () => {
           expect(updatedArticle).toEqual({
             author: "butter_bridge",
             title: "Living in the shadow of a great man",
-            article_id: article_id,
+            article_id: 1,
             body: "I find this existence challenging",
             topic: "mitch",
             created_at: expect.any(String),
@@ -114,10 +113,9 @@ describe("ARTICLE ENDPOINTS", () => {
           });
         });
     });
-    test("STATUS 200: Sends back the updated article with correct key value pairs", () => {
-      const article_id = 1;
+    test("STATUS 200: TESTS NEGATIVE INTEGER VOTES. Sends back the updated article with correct key value pairs", () => {
       const articleUpdates = {
-        inc_votes: 1,
+        inc_votes: -50,
       };
       return request(app)
         .patch("/api/articles/1")
@@ -127,28 +125,48 @@ describe("ARTICLE ENDPOINTS", () => {
           expect(updatedArticle).toEqual({
             author: "butter_bridge",
             title: "Living in the shadow of a great man",
-            article_id: article_id,
+            article_id: 1,
             body: "I find this existence challenging",
             topic: "mitch",
             created_at: expect.any(String),
-            votes: 101,
+            votes: 50,
           });
         });
     });
-    test("STATUS 400: Bad request - Tests for valid requests but return no data", () => {
+    test("STATUS 400: Bad request - Tests for valid requests but return no data, (PSQL error)", () => {
+      const articleUpdates = {
+        inc_votes: 1,
+      };
       return request(app)
         .patch("/api/articles/NOT-AN-ID")
+        .send(articleUpdates)
         .expect(400)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("Invalid input");
         });
     });
-    test("STATUS 404: Request not found - Tests ID number generates data", () => {
+    test("STATUS 404: Request not found - Tests article ID number generates data", () => {
+      const articleUpdates = {
+        inc_votes: 1,
+      };
       return request(app)
-        .get("/api/articles/666")
+        .patch("/api/articles/666")
+        .send(articleUpdates)
         .expect(404)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("Request not found");
+        });
+    });
+    test("STATUS 400: Tests input votes as none numerical interger", () => {
+      const articleUpdates = {
+        inc_votes: "DROP DATABASE",
+      };
+      return request(app)
+        .patch("/api/articles/1")
+        .send(articleUpdates)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Invalid input");
         });
     });
   });
