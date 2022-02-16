@@ -4,8 +4,8 @@ const data = require("../db/data/index");
 
 const app = require("../app");
 const request = require("supertest");
-// import * as matchers from "jest-extended";
-// expect.extend(matchers);
+require("jest-extended");
+require("jest-sorted");
 
 beforeEach(() => seed(data));
 afterAll(() => db.end());
@@ -65,6 +65,22 @@ describe("ARTICLE ENDPOINTS", () => {
         .expect(404)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("Request not found");
+        });
+    });
+  });
+});
+
+describe("USER ENDPOINTS", () => {
+  describe("GET /api/users", () => {
+    test("STATUS 200:  Returns: { users: [ {username: username}, {username: username}...] }", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body: { users } }) => {
+          expect(users).toBeArray();
+          users.forEach((user) => {
+            expect(user).toContainKey("username");
+          });
         });
     });
   });

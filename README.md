@@ -18,3 +18,8 @@ Responds with an ID's article objectcontaining the following properties:
 -> topic
 -> created_at
 -> votes
+
+5.) GET '/api/users'
+Responds with array of objects from all users, each containing the following properties:
+
+- username
