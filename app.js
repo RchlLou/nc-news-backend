@@ -10,13 +10,21 @@ const {
 
 const { getTopics } = require("./controllers/topics-controller");
 
-const { getArticleById } = require("./controllers/articles-controller");
+const {
+  getArticles,
+  getArticleById,
+  updateArticle,
+} = require("./controllers/articles-controller");
 
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
 
+app.get("/api/articles", getArticles);
+
 app.get("/api/articles/:article_id", getArticleById);
+
+app.patch("/api/articles/:article_id", updateArticle);
 
 app.all("/*", handlePathNotFound);
 
