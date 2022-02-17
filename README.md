@@ -9,7 +9,17 @@ Responds with an array of topic objects, each containing the following propertie
 -> slug
 -> description
 
-2.) GET '/api/articles/:article_id'
+2.) GET '/api/articles'
+Articles are sorted by date in descending order.
+Responds with an array of article objects, each of with the following properties:
+-> author
+-> title
+-> article_id
+-> topic
+-> created_at
+-> votes
+
+3.) GET '/api/articles/:article_id'
 Responds with an ID's article objectcontaining the following properties:
 -> author
 -> title
@@ -19,7 +29,4 @@ Responds with an ID's article objectcontaining the following properties:
 -> created_at
 -> votes
 
-5.) GET '/api/users'
-Responds with array of objects from all users, each containing the following properties:
 
-- username
