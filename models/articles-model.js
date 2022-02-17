@@ -4,7 +4,9 @@ const { isThereAPsqlError } = require("./utils-model");
 
 exports.retrieveArticles = () => {
   return db
-    .query("SELECT * FROM articles ORDER BY created_at DESC;")
+    .query(
+      "SELECT article_id, title, author, topic, created_at, votes FROM articles ORDER BY created_at DESC;"
+    )
     .then(({ rows }) => {
       return rows;
     });

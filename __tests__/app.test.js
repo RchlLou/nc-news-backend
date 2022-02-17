@@ -48,7 +48,6 @@ describe("ARTICLE ENDPOINTS", () => {
               "article_id",
               "title",
               "author",
-              "body",
               "topic",
               "created_at",
               "votes",
