@@ -70,17 +70,17 @@ describe("ARTICLE ENDPOINTS", () => {
   });
 });
 
-describe("TO ADD INTO ARTICLES...", () => {
-  test("GET /api/articles/:article_id/comments", () => {
-    return request
-      .agent(app)
-      .get("/api/articles/1/comments")
-      .expect(200)
-      .then(({ body: { comments } }) => {
-        expect(comments).toEqual();
-      });
-  });
-});
+// describe("TO ADD INTO ARTICLES...", () => {
+//   test("GET /api/articles/:article_id/comments", () => {
+//     return request
+//       .agent(app)
+//       .get("/api/articles/1/comments")
+//       .expect(200)
+//       .then(({ body: { comments } }) => {
+//         expect(comments).toEqual();
+//       });
+//   });
+// });
 
 describe("GLOBAL ERRORS", () => {
   test("STATUS 404: Tests unrecognised endpoints and responds with status 404 - Endpoint not found", () => {
