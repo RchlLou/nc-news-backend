@@ -18,6 +18,8 @@ const {
 
 const { getUsers } = require("./controllers/users-controller");
 
+const { getCommentsByArticleId } = require("./controllers/comments-controller");
+
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
@@ -26,9 +28,11 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id", getArticleById);
 
+app.patch("/api/articles/:article_id", updateArticle);
+
 app.get("/api/users", getUsers);
 
-app.patch("/api/articles/:article_id", updateArticle);
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.all("/*", handle404Errors);
 

@@ -172,6 +172,43 @@ describe("ARTICLE ENDPOINTS", () => {
   });
 });
 
+describe("COMMENTS ENDPOINT", () => {
+  describe("GET /api/articles/:article_id/comments", () => {
+    test("STAUTS 200: Sends { articleComments: [ {comment_object}, {comment_object} ] }", () => {
+      return request(app)
+        .get("/api/articles/3/comments")
+        .expect(200)
+        .then(({ body: { articleComments } }) => {
+          expect(articleComments).toHaveLength(2);
+          articleComments.forEach((comment) => {
+            expect(comment).toContainKeys([
+              "comment_id",
+              "votes",
+              "created_at",
+              "body",
+            ]);
+          });
+        });
+    });
+  });
+  test("STATUS 404: Article ID doesn't exist", () => {
+    return request(app)
+      .get("/api/articles/666/comments")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Request not found");
+      });
+  });
+  test("STATUS 400: Bad request - Tests for valid requests but returns no data", () => {
+    return request(app)
+      .get("/api/articles/NOT-AN-ID")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid input");
+      });
+  });
+});
+
 describe("USER ENDPOINTS", () => {
   describe("GET /api/users", () => {
     test("STATUS 200:  Returns: { users: [ {username: username}, {username: username}...] }", () => {

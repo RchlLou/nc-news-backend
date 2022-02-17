@@ -1,4 +1,4 @@
-exports.isThereAPsqlError = (rows) => {
+exports.test404Error = (rows) => {
   return rows.length === 0
     ? Promise.reject({
         status: 404,

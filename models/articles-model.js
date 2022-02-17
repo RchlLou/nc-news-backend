@@ -1,6 +1,5 @@
 const db = require("../db/connection");
-
-const { isThereAPsqlError } = require("./utils-model");
+const { test404Error } = require("./utils-model");
 
 exports.retrieveArticles = () => {
   return db
@@ -14,7 +13,7 @@ exports.retrieveArticleId = (articleId) => {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1;", [articleId])
     .then(({ rows }) => {
-      return isThereAPsqlError(rows);
+      return test404Error(rows);
     })
     .then((rows) => {
       return rows[0];
@@ -28,7 +27,7 @@ exports.alterArticle = (incVotes, articleId) => {
       [incVotes, articleId]
     )
     .then(({ rows }) => {
-      return isThereAPsqlError(rows);
+      return test404Error(rows);
     })
     .then((rows) => {
       return rows[0];
