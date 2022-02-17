@@ -172,6 +172,22 @@ describe("ARTICLE ENDPOINTS", () => {
   });
 });
 
+describe("USER ENDPOINTS", () => {
+  describe("GET /api/users", () => {
+    test("STATUS 200:  Returns: { users: [ {username: username}, {username: username}...] }", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body: { users } }) => {
+          expect(users).toBeArray();
+          users.forEach((user) => {
+            expect(user).toContainKey("username");
+          });
+        });
+    });
+  });
+});
+
 describe("GLOBAL ERRORS", () => {
   test("STATUS 404: Tests unrecognised endpoints and responds with appropraite message", () => {
     return request(app)

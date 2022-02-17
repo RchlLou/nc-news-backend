@@ -29,17 +29,4 @@ Responds with an ID's article objectcontaining the following properties:
 -> created_at
 -> votes
 
-4.) PATCH '/api/articles/:article_id'
-Request body accepts:
 
-- an object - { inc_votes: newVote }
-- (newVote indicates the vote number for addition or subtraction.
-
-Responds with the updated article with the following properties:
--> author
--> title
--> article_id
--> body
--> topic
--> created_at
--> votes
