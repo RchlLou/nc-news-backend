@@ -1,4 +1,4 @@
-exports.handlePathNotFound = (req, res) => {
+exports.handle404Errors = (req, res) => {
   res.status(404).send({ msg: "Endpoint not found" });
 };
 

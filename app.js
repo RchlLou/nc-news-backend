@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 const {
-  handlePathNotFound,
+  handle404Errors,
   handlePsqlErrors,
   handleCustomErrors,
   handleServerErrors,
@@ -10,6 +10,13 @@ const {
 
 const { getTopics } = require("./controllers/topics-controller");
 
+const {
+  getArticles,
+  getArticleById,
+  updateArticle,
+} = require("./controllers/articles-controller");
+
+const { getUsers } = require("./controllers/users-controller");
 
 app.use(express.json());
 
@@ -19,9 +26,11 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id", getArticleById);
 
+app.get("/api/users", getUsers);
 
+app.patch("/api/articles/:article_id", updateArticle);
 
-app.all("/*", handlePathNotFound);
+app.all("/*", handle404Errors);
 
 app.use(handleCustomErrors);
 
