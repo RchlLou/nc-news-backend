@@ -12,11 +12,15 @@ const { getTopics } = require("./controllers/topics-controller");
 
 const { getArticleById } = require("./controllers/articles-controller");
 
+const { getCommentsByArticleId } = require("./controllers/comments-controller");
+
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleById);
+
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.all("/*", handlePathNotFound);
 

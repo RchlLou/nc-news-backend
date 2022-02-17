@@ -4,8 +4,8 @@ const data = require("../db/data/index");
 
 const app = require("../app");
 const request = require("supertest");
-// import * as matchers from "jest-extended";
-// expect.extend(matchers);
+require("jest-extended");
+require("jest-sorted");
 
 beforeEach(() => seed(data));
 afterAll(() => db.end());
@@ -67,6 +67,18 @@ describe("ARTICLE ENDPOINTS", () => {
           expect(msg).toBe("Request not found");
         });
     });
+  });
+});
+
+describe("TO ADD INTO ARTICLES...", () => {
+  test("GET /api/articles/:article_id/comments", () => {
+    return request
+      .agent(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments).toEqual();
+      });
   });
 });
 
