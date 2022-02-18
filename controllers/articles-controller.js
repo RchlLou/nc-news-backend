@@ -22,7 +22,7 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.updateArticle = (req, res, next) => {
-  const { inc_votes: incVotes } = req.body;
+  let { inc_votes: incVotes } = req.body;
   const { article_id: articleId } = req.params;
 
   alterArticle(incVotes, articleId)
