@@ -1,11 +1,10 @@
-exports.handle404Errors = (req, res) => {
+exports.handlePathNotFound = (req, res) => {
   res.status(404).send({ msg: "Endpoint not found" });
 };
 
 exports.handlePsqlErrors = (err, req, res, next) => {
-  console.log(err.code);
   if (err.code === "22P02") {
-    res.status(400).send({ msg: "Invalid input" });
+    res.status(406).send({ msg: "Invalid ID" });
   } else {
     next(err);
   }

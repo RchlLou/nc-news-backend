@@ -54,10 +54,16 @@ Responds with array of objects from all users, each containing the following pro
 > username
 
 6.) GET '/api/articles/:article_id/comments'
-Responds as an object the value of an array of comments for the given article ID. Each comment has the following properties:
+Responds as an object with the value of an array of comments for the given article ID. Each comment has the following properties:
 
 > comment_id
 > votes
 > created_at
 > author
 > body
+
+ERRORS
+
+> > 400 - BAD REQUEST - '${input} is not accepted'
+> > 404 - NOT FOUND - 'Article cannot be found'
+> > 406 - NOT ACCEPTABLE - 'Invalid ID' (Thrown by a PSQL error)

@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 const {
-  handle404Errors,
+  handlePathNotFound,
   handlePsqlErrors,
   handleCustomErrors,
   handleServerErrors,
@@ -34,7 +34,7 @@ app.get("/api/users", getUsers);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
-app.all("/*", handle404Errors);
+app.all("/*", handlePathNotFound);
 
 app.use(handleCustomErrors);
 

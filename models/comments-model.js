@@ -1,16 +1,18 @@
 const db = require("../db/connection");
-const { test404Error } = require("./utils-model");
+const { testFor404Error } = require("./utils-model");
+const { getArticleById } = require("../controllers/articles-controller");
 
-exports.retrieveComments = (articleId) => {
-  return db
-    .query(
-      "SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1;",
-      [articleId]
-    )
-    .then(({ rows }) => {
-      return test404Error(rows);
-    })
-    .then((rows) => {
-      return rows;
-    });
+exports.retrieveComments = async (articleId) => {
+  const existenceQuery = await db.query(
+    "SELECT title FROM articles WHERE article_id = $1;",
+    [articleId]
+  );
+  await testFor404Error(existenceQuery.rows);
+
+  const commentQuery = await db.query(
+    "SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1;",
+    [articleId]
+  );
+
+  return commentQuery.rows;
 };
