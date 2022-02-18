@@ -21,9 +21,13 @@ Responds with an array of article objects, each of with the following properties
 > created_at
 > votes
 
+> comment_count
+
 3.) GET '/api/articles/:article_id'
 Responds with an ID's article objectcontaining the following properties:
 
+
+> comment_count
 > author
 > title
 > article_id
@@ -67,3 +71,4 @@ ERRORS
 > > 400 - BAD REQUEST - '${input} is not accepted'
 > > 404 - NOT FOUND - 'Article cannot be found'
 > > 406 - NOT ACCEPTABLE - 'Invalid ID' (Thrown by a PSQL error)
+
