@@ -19,6 +19,8 @@ Responds with an array of article objects, each of with the following properties
 -> created_at
 -> votes
 
+> comment_count
+
 3.) GET '/api/articles/:article_id'
 Responds with an ID's article objectcontaining the following properties:
 -> author
@@ -29,4 +31,4 @@ Responds with an ID's article objectcontaining the following properties:
 -> created_at
 -> votes
 
-
+> comment_count

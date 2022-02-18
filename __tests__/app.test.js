@@ -74,6 +74,14 @@ describe("ARTICLE ENDPOINTS", () => {
           ]);
         });
     });
+    test("FEATURE REQUEST - ADD COMMENT COUNT: STATUS 200: Returns comment count into object article", () => {
+      return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article).toContainKeys(["comment_count"]);
+        });
+    });
     test("STATUS 400: Bad request - Tests for valid requests but returns no data", () => {
       return request(app)
         .get("/api/articles/NOT-AN-ID")
