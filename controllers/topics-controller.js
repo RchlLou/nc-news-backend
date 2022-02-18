@@ -1,7 +1,9 @@
 const { retrieveTopics } = require("../models/topics-model");
 
 exports.getTopics = (req, res, next) => {
-  retrieveTopics()
+  const { article_id: articleId } = req.params;
+
+  retrieveTopics(articleId, req)
     .then((topics) => {
       res.status(200).send({ topics });
     })
