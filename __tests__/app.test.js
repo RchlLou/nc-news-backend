@@ -4,6 +4,7 @@ const data = require("../db/data/index");
 
 const app = require("../app");
 const request = require("supertest");
+
 require("jest-extended");
 require("jest-sorted");
 
@@ -34,7 +35,7 @@ describe("TOPIC ENDPOINTS", () => {
 });
 describe("ARTICLE ENDPOINTS", () => {
   describe("GET /api/articles", () => {
-    test("STATUS 200: Sends back array of article objects in descending date created at order. Each object contains the correct keys", () => {
+    test("STATUS 200: Sends back array of article objects in DESCENDING DATE ORDER. Each object contains the correct keys", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
@@ -48,7 +49,6 @@ describe("ARTICLE ENDPOINTS", () => {
               "article_id",
               "title",
               "author",
-              "body",
               "topic",
               "created_at",
               "votes",
@@ -75,20 +75,20 @@ describe("ARTICLE ENDPOINTS", () => {
           ]);
         });
     });
-    test("STATUS 400: Bad request - Tests for valid requests but returns no data", () => {
+    test("STATUS 406: Not Acceptable - Tests for invalid ID requests", () => {
       return request(app)
         .get("/api/articles/NOT-AN-ID")
-        .expect(400)
+        .expect(406)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid input");
+          expect(msg).toBe("Invalid ID");
         });
     });
-    test("STATUS 404: Request not found - Tests ID number generates data", () => {
+    test("STATUS 404: Not Found - Tests ID number generates data", () => {
       return request(app)
         .get("/api/articles/666")
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Request not found");
+          expect(msg).toBe("Article cannot be found");
         });
     });
   });
@@ -133,19 +133,19 @@ describe("ARTICLE ENDPOINTS", () => {
           });
         });
     });
-    test("STATUS 400: Bad request - Tests for valid requests but return no data, (PSQL error)", () => {
+    test("STATUS 406: Not Acceptable - Tests for invalid ID requests", () => {
       const articleUpdates = {
         inc_votes: 1,
       };
       return request(app)
         .patch("/api/articles/NOT-AN-ID")
         .send(articleUpdates)
-        .expect(400)
+        .expect(406)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid input");
+          expect(msg).toBe("Invalid ID");
         });
     });
-    test("STATUS 404: Request not found - Tests article ID number generates data", () => {
+    test("STATUS 404: Not Found - Tests ID number generates data", () => {
       const articleUpdates = {
         inc_votes: 1,
       };
@@ -154,10 +154,10 @@ describe("ARTICLE ENDPOINTS", () => {
         .send(articleUpdates)
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Request not found");
+          expect(msg).toBe("Article cannot be found");
         });
     });
-    test("STATUS 400: Tests input votes as none numerical interger", () => {
+    test("STATUS 400: Bad Request - Tests input votes DOES NOT ACCEPT none interger", () => {
       const articleUpdates = {
         inc_votes: "DROP DATABASE",
       };
@@ -166,12 +166,76 @@ describe("ARTICLE ENDPOINTS", () => {
         .send(articleUpdates)
         .expect(400)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid input");
+          expect(msg).toBe(`${articleUpdates.inc_votes} is not accepted`);
         });
     });
   });
 });
 
+describe("COMMENTS ENDPOINT", () => {
+  describe("GET /api/articles/:article_id/comments", () => {
+    test("STAUTS 200: Sends { articleComments: [ {comment_object}, {comment_object} ] }", () => {
+      return request(app)
+        .get("/api/articles/3/comments")
+        .expect(200)
+        .then(({ body: { articleComments } }) => {
+          expect(articleComments).toHaveLength(2);
+          articleComments.forEach((comment) => {
+            expect(comment).toContainKeys([
+              "comment_id",
+              "votes",
+              "created_at",
+              "author",
+              "body",
+            ]);
+          });
+        });
+    });
+    test("STATUS 200: VALID ID but contains no comments", () => {
+      return request(app)
+        .get("/api/articles/2/comments")
+        .expect(200)
+        .then(({ body: { articleComments } }) => {
+          expect(articleComments.msg).toBe("This article has no comments");
+        });
+    });
+    // test("STATUS 200: VALID ID but NO COMMENTS - Returns /api/articles/:article_id", () => {
+    //   return request(app)
+    //     .get("/api/articles/2/comments")
+    //     .expect(200)
+    //     .then(() => {
+    //       return request(app).get("/api/articles/2");
+    //     })
+    //     .then(({ body: { article } }) => {
+    //       expect(article).toContainEntries([
+    //         ["article_id", 2],
+    //         ["title", "Sony Vaio; or, The Laptop"],
+    //         ["author", "icellusedkars"],
+    //         ["body", "Call me Mitchell."],
+    //         ["topic", "mitch"],
+    //         ["created_at", expect.any(String)],
+    //         ["votes", 0],
+    //       ]);
+    //     });
+    // });
+    test("STATUS 404: Article ID doesn't exist", () => {
+      return request(app)
+        .get("/api/articles/666/comments")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Article cannot be found");
+        });
+    });
+    test("STATUS 406: Not Acceptable - Tests for invalid ID requests", () => {
+      return request(app)
+        .get("/api/articles/NOT-AN-ID/comments")
+        .expect(406)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Invalid ID");
+        });
+    });
+  });
+});
 describe("USER ENDPOINTS", () => {
   describe("GET /api/users", () => {
     test("STATUS 200:  Returns: { users: [ {username: username}, {username: username}...] }", () => {
