@@ -56,6 +56,17 @@ describe("ARTICLE ENDPOINTS", () => {
           });
         });
     });
+    test("FEATURE REQUEST - ADD COMMENT COUNT: STATUS 200: Returns comment count into return object array", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeArray();
+          articles.forEach((article) => {
+            expect(article).toContainKeys(["comment_count"]);
+          });
+        });
+    });
   });
   describe("GET /api/articles/:article_id", () => {
     test("STATUS 200: Sends back object with correct keys and values. { article_id: { article data } }", () => {
