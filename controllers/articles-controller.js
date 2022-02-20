@@ -5,7 +5,19 @@ const {
 } = require("../models/articles-model");
 
 exports.getArticles = (req, res, next) => {
-  retrieveArticles()
+  let { sort_by: sortBy } = req.query;
+  let { order } = req.query;
+  console.log(order);
+
+  if (sortBy === undefined) {
+    sortBy = "created_at";
+  }
+
+  if (order === undefined) {
+    order = "desc";
+  }
+
+  retrieveArticles(sortBy, order)
     .then((articles) => {
       res.status(200).send({ articles });
     })
@@ -14,6 +26,7 @@ exports.getArticles = (req, res, next) => {
 
 exports.getArticleById = (req, res, next) => {
   const { article_id: articleId } = req.params;
+
   retrieveArticleId(articleId)
     .then((article) => {
       res.status(200).send({ article });
