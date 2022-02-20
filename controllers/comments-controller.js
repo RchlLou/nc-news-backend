@@ -1,9 +1,8 @@
-const { retrieveComments } = require("../models/comments-model");
-
-// const { getArticleById } = require("../app");
-
-// const express = require("express");
-// const app = express();
+const {
+  retrieveComments,
+  addComment,
+  eradicateComment,
+} = require("../models/comments-model");
 
 exports.getCommentsByArticleId = async (req, res, next) => {
   const { article_id: articleId } = req.params;
@@ -15,19 +14,32 @@ exports.getCommentsByArticleId = async (req, res, next) => {
       res
         .status(200)
         .send({ articleComments: { msg: "This article has no comments" } });
-      // Promise.resolve({
-      //   status: 200,
-      //   msg: "This article has no comments",
-      // });
-
-      // console.log(articleComments);
-      // const { originalUrl } = req;
-      // const newUrl = originalUrl.slice(0, -9);
-      // console.log(newUrl);
-      // res.redirect(302, newUrl);
     } else {
       res.status(200).send({ articleComments });
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.postComment = async (req, res, next) => {
+  const { body, username } = req.body;
+  const { article_id: articleId } = req.params;
+
+  try {
+    const postedComment = await addComment(body, username, articleId);
+    res.status(200).send({ postedComment });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.deleteComment = async (req, res, next) => {
+  const { comment_id: commentId } = req.params;
+
+  try {
+    await eradicateComment(commentId);
+    res.status(204).send();
   } catch (err) {
     next(err);
   }
