@@ -7,7 +7,7 @@ const {
 exports.getArticles = (req, res, next) => {
   let { sort_by: sortBy } = req.query;
   let { order } = req.query;
-  console.log(order);
+  let { topic } = req.query;
 
   if (sortBy === undefined) {
     sortBy = "created_at";
@@ -17,8 +17,9 @@ exports.getArticles = (req, res, next) => {
     order = "desc";
   }
 
-  retrieveArticles(sortBy, order)
+  retrieveArticles(sortBy, order, topic)
     .then((articles) => {
+      console.log("hello");
       res.status(200).send({ articles });
     })
     .catch(next);
