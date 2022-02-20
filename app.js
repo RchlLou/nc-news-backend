@@ -47,13 +47,14 @@ app.all("/*", handlePathNotFound);
 
 app.use(handleCustomErrors);
 
-app.use(handlePsqlError400);
+// 416 NEEDS TO BE BEFORE 400
+app.use(handlePsqlError416);
 
-app.use(handlePsqlError404);
+app.use(handlePsqlError400);
 
 app.use(handlePsqlErrors406);
 
-app.use(handlePsqlError416);
+app.use(handlePsqlError404);
 
 app.use(handlePsqlError411);
 
