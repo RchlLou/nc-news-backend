@@ -16,3 +16,14 @@ exports.retrieveComments = async (articleId) => {
 
   return commentQuery.rows;
 };
+
+exports.addComment = async (body, username, articleId) => {
+  const date = new Date();
+  const result = await db.query(
+    `INSERT INTO comments (body, article_id, author, votes, created_at) VALUES ($1, $2, $3,
+      0, $4) RETURNING *;`,
+    [body, articleId, username, date]
+  );
+
+  return result.rows[0];
+};

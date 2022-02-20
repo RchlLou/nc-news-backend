@@ -86,7 +86,6 @@ describe("ARTICLE ENDPOINTS", () => {
           ]);
         });
     });
-
     test("FEATURE REQUEST - ADD COMMENT COUNT: STATUS 200: Returns comment count into object article", () => {
       return request(app)
         .get("/api/articles/1")
@@ -95,15 +94,12 @@ describe("ARTICLE ENDPOINTS", () => {
           expect(article).toContainKeys(["comment_count"]);
         });
     });
-    test("STATUS 400: Bad request - Tests for valid requests but returns no data", () => {
-
     test("STATUS 406: Not Acceptable - Tests for invalid ID requests", () => {
-
       return request(app)
         .get("/api/articles/NOT-AN-ID")
         .expect(406)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid ID");
+          expect(msg).toBe("Invalid input");
         });
     });
     test("STATUS 404: Not Found - Tests ID number generates data", () => {
@@ -165,7 +161,7 @@ describe("ARTICLE ENDPOINTS", () => {
         .send(articleUpdates)
         .expect(406)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid ID");
+          expect(msg).toBe("Invalid input");
         });
     });
     test("STATUS 404: Not Found - Tests ID number generates data", () => {
@@ -187,9 +183,9 @@ describe("ARTICLE ENDPOINTS", () => {
       return request(app)
         .patch("/api/articles/1")
         .send(articleUpdates)
-        .expect(400)
+        .expect(406)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe(`${articleUpdates.inc_votes} is not accepted`);
+          expect(msg).toBe("Invalid input");
         });
     });
   });
@@ -222,25 +218,6 @@ describe("COMMENTS ENDPOINT", () => {
           expect(articleComments.msg).toBe("This article has no comments");
         });
     });
-    // test("STATUS 200: VALID ID but NO COMMENTS - Returns /api/articles/:article_id", () => {
-    //   return request(app)
-    //     .get("/api/articles/2/comments")
-    //     .expect(200)
-    //     .then(() => {
-    //       return request(app).get("/api/articles/2");
-    //     })
-    //     .then(({ body: { article } }) => {
-    //       expect(article).toContainEntries([
-    //         ["article_id", 2],
-    //         ["title", "Sony Vaio; or, The Laptop"],
-    //         ["author", "icellusedkars"],
-    //         ["body", "Call me Mitchell."],
-    //         ["topic", "mitch"],
-    //         ["created_at", expect.any(String)],
-    //         ["votes", 0],
-    //       ]);
-    //     });
-    // });
     test("STATUS 404: Article ID doesn't exist", () => {
       return request(app)
         .get("/api/articles/666/comments")
@@ -254,7 +231,120 @@ describe("COMMENTS ENDPOINT", () => {
         .get("/api/articles/NOT-AN-ID/comments")
         .expect(406)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid ID");
+          expect(msg).toBe("Invalid input");
+        });
+    });
+  });
+  describe("POST /api/articles/:article_id/comments", () => {
+    test("STATUS 200: Posts a new comment and returns the posted comment", () => {
+      const posetedComment = {
+        username: "rogersop",
+        body: "Hello World!",
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(posetedComment)
+        .expect(200)
+        .then(({ body: { postedComment } }) => {
+          expect(postedComment).toEqual({
+            comment_id: 19,
+            body: "Hello World!",
+            article_id: 2,
+            author: "rogersop",
+            votes: 0,
+            created_at: expect.any(String),
+          });
+        });
+    });
+    test("STATUS 404: Article ID doesn't exist", () => {
+      const posetedComment = {
+        username: "rogersop",
+        body: "Hello World!",
+      };
+      return request(app)
+        .post("/api/articles/666/comments")
+        .send(posetedComment)
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Article cannot be found");
+        });
+    });
+    test("STATUS 406: Article ID is NOT VALID", () => {
+      const posetedComment = {
+        username: "rogersop",
+        body: "Hello World!",
+      };
+      return request(app)
+        .post("/api/articles/NOT-AN-ID/comments")
+        .send(posetedComment)
+        .expect(406)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Invalid input");
+        });
+    });
+    test("STATUS 404: Username is not registered", () => {
+      const posetedComment = {
+        username: "IS-NOT-A-REGISTERED-USER",
+        body: "Hello World!",
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(posetedComment)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("IS-NOT-A-REGISTERED-USER is not accepted");
+        });
+    });
+    test("STATUS 400: Username is integer", () => {
+      const posetedComment = {
+        username: 0,
+        body: "Hello World!",
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(posetedComment)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("0 is not accepted");
+        });
+    });
+    test("STATUS 416: Username is EMPTY", () => {
+      const posetedComment = {
+        username: "",
+        body: "Hello World",
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(posetedComment)
+        .expect(416)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Input is undefined");
+        });
+    });
+    test("STATUS 411: Username is NULL", () => {
+      const posetedComment = {
+        username: null,
+        body: "Hello World",
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(posetedComment)
+        .expect(411)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Input is required");
+        });
+    });
+    test("STATUS 411: Body is UNDEFINED", () => {
+      const posetedComment = {
+        username: "rogersop",
+        body: null,
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(posetedComment)
+        .expect(411)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Input is required");
         });
     });
   });
@@ -285,3 +375,24 @@ describe("GLOBAL ERRORS", () => {
       });
   });
 });
+
+///////////// POTENTIAL TEST TO ADD IN IF WANT TO REDEIRECT TO ARTICLES IF THERE'S NO COMMENTS  //////////////////////////
+// / test("STATUS 200: VALID ID but NO COMMENTS - Returns /api/articles/:article_id", () => {
+//   return request(app)
+//     .get("/api/articles/2/comments")
+//     .expect(200)
+//     .then(() => {
+//       return request(app).get("/api/articles/2");
+//     })
+//     .then(({ body: { article } }) => {
+//       expect(article).toContainEntries([
+//         ["article_id", 2],
+//         ["title", "Sony Vaio; or, The Laptop"],
+//         ["author", "icellusedkars"],
+//         ["body", "Call me Mitchell."],
+//         ["topic", "mitch"],
+//         ["created_at", expect.any(String)],
+//         ["votes", 0],
+//       ]);
+//     });
+// });

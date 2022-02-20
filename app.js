@@ -3,7 +3,11 @@ const app = express();
 
 const {
   handlePathNotFound,
-  handlePsqlErrors,
+  handlePsqlErrors406,
+  handlePsqlError411,
+  handlePsqlError416,
+  handlePsqlError400,
+  handlePsqlError404,
   handleCustomErrors,
   handleServerErrors,
 } = require("./utils/error-handling");
@@ -18,7 +22,10 @@ const {
 
 const { getUsers } = require("./controllers/users-controller");
 
-const { getCommentsByArticleId } = require("./controllers/comments-controller");
+const {
+  getCommentsByArticleId,
+  postComment,
+} = require("./controllers/comments-controller");
 
 app.use(express.json());
 
@@ -28,17 +35,27 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id", getArticleById);
 
-app.patch("/api/articles/:article_id", updateArticle);
-
 app.get("/api/users", getUsers);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+
+app.patch("/api/articles/:article_id", updateArticle);
+
+app.post("/api/articles/:article_id/comments", postComment);
 
 app.all("/*", handlePathNotFound);
 
 app.use(handleCustomErrors);
 
-app.use(handlePsqlErrors);
+app.use(handlePsqlError400);
+
+app.use(handlePsqlError404);
+
+app.use(handlePsqlErrors406);
+
+app.use(handlePsqlError416);
+
+app.use(handlePsqlError411);
 
 app.use(handleServerErrors);
 
