@@ -107,7 +107,7 @@ describe("ARTICLE ENDPOINTS", () => {
         .get("/api/articles/666")
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Article cannot be found");
+          expect(msg).toBe("ID cannot be found");
         });
     });
   });
@@ -173,7 +173,7 @@ describe("ARTICLE ENDPOINTS", () => {
         .send(articleUpdates)
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Article cannot be found");
+          expect(msg).toBe("ID cannot be found");
         });
     });
     test("STATUS 400: Bad Request - Tests input votes DOES NOT ACCEPT none interger", () => {
@@ -223,7 +223,7 @@ describe("COMMENTS ENDPOINT", () => {
         .get("/api/articles/666/comments")
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Article cannot be found");
+          expect(msg).toBe("ID cannot be found");
         });
     });
     test("STATUS 406: Not Acceptable - Tests for invalid ID requests", () => {
@@ -345,6 +345,32 @@ describe("COMMENTS ENDPOINT", () => {
         .expect(411)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("Input is required");
+        });
+    });
+  });
+  describe("DELETE /api/comments/:comment_id", () => {
+    test("Status 204: Deletes comment of comment_id.  Returns message.", () => {
+      const commentId = 1;
+      return request(app).delete("/api/comments/1").expect(204);
+    });
+    test("STATUS 204: Deletes comment of comment_id.  Returns message.", () => {
+      const commentId = 1;
+      return request(app).delete("/api/comments/1").expect(204);
+    });
+    test("STATUS 404, comment does not exist", () => {
+      return request(app)
+        .delete("/api/comments/666")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("ID cannot be found");
+        });
+    });
+    test("STATUS 400, comment ID not accepted", () => {
+      return request(app)
+        .delete("/api/comments/NOT-AN-ID")
+        .expect(406)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Invalid input");
         });
     });
   });

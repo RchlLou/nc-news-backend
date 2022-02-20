@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-const { testFor404Error } = require("./utils-model");
+const { testFor404Error } = require("../utils/error-handling");
 
 // GET /api/articles >>> getArticles
 exports.retrieveArticles = async () => {
@@ -30,16 +30,3 @@ exports.alterArticle = async (incVotes, articleId) => {
 
   return result.rows[0];
 };
-
-//////////  NOTES FOR IF ADD ARTICLE RE-DIRECTION /////
-// // Tests req.body is numerical value
-// testFor400Error = async (incVotes) => {
-//   return typeof incVotes !== "number"
-//     ? Promise.reject({
-//         status: 400,
-//         msg: `${incVotes} is not accepted`,
-//       })
-//     : incVotes;
-// };
-
-// await testFor400Error(incVotes);

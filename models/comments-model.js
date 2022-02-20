@@ -1,6 +1,5 @@
 const db = require("../db/connection");
-const { testFor404Error } = require("./utils-model");
-const { getArticleById } = require("../controllers/articles-controller");
+const { testFor404Error } = require("../utils/error-handling");
 
 exports.retrieveComments = async (articleId) => {
   const existenceQuery = await db.query(
@@ -20,10 +19,23 @@ exports.retrieveComments = async (articleId) => {
 exports.addComment = async (body, username, articleId) => {
   const date = new Date();
   const result = await db.query(
-    `INSERT INTO comments (body, article_id, author, votes, created_at) VALUES ($1, $2, $3,
-      0, $4) RETURNING *;`,
+    `INSERT INTO comments (body, article_id, author, votes, created_at) VALUES ($1, $2, $3, 0, $4) RETURNING *;`,
     [body, articleId, username, date]
   );
 
   return result.rows[0];
+};
+
+exports.eradicateComment = async (commentId) => {
+  const existence = await db.query(
+    "SELECT comment_id FROM comments WHERE comment_id = $1;",
+    [commentId]
+  );
+
+  await testFor404Error(existence.rows);
+
+  await db.query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *;`, [
+    commentId,
+  ]);
+  return;
 };

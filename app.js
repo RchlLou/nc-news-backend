@@ -25,6 +25,7 @@ const { getUsers } = require("./controllers/users-controller");
 const {
   getCommentsByArticleId,
   postComment,
+  deleteComment,
 } = require("./controllers/comments-controller");
 
 app.use(express.json());
@@ -42,6 +43,8 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.patch("/api/articles/:article_id", updateArticle);
 
 app.post("/api/articles/:article_id/comments", postComment);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 app.all("/*", handlePathNotFound);
 

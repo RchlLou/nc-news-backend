@@ -82,9 +82,3 @@ Responds as an object with the value of an array of comments for the given artic
     body: 'Hello World!' }
 
 - Response sends an object with posted comment.
-
-ERRORS
-
-> > 400 - BAD REQUEST - '${input} is not accepted'
-> > 404 - NOT FOUND - 'Article cannot be found', ie, article = 666
-> > 406 - NOT ACCEPTABLE - 'Invalid input', ie article = 'DROP DATABASE"(Picked up by a PSQL)
