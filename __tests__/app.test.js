@@ -34,142 +34,142 @@ describe("TOPIC ENDPOINTS", () => {
   });
 });
 describe("ARTICLE ENDPOINTS", () => {
-  // describe("GET /api/articles", () => {
-  //   test.only("STATUS 200: Sends back array of article objects in DESCENDING DATE ORDER. Each object contains the correct keys. (Endpoint accept QUERY: sort_by: DATE in ASC/DESC order.  Sort_by DATE in DESC order, is the DEFAULT status)", () => {
-  //     return request(app)
-  //       .get("/api/articles")
-  //       .expect(200)
-  //       .then(({ body: { articles } }) => {
-  //         expect(articles).toBeArray();
-  //         expect(articles).toBeSortedBy("created_at", {
-  //           descending: true,
-  //         });
-  //         articles.forEach((article) => {
-  //           expect(article).toContainKeys([
-  //             "article_id",
-  //             "title",
-  //             "author",
-  //             "topic",
-  //             "created_at",
-  //             "votes",
-  //           ]);
-  //         });
-  //       });
-  //   });
-  //   test("FEATURE REQUEST - ADD COMMENT COUNT: STATUS 200: Returns comment count into return object array", () => {
-  //     return request(app)
-  //       .get("/api/articles")
-  //       .expect(200)
-  //       .then(({ body: { articles } }) => {
-  //         expect(articles).toBeArray();
-  //         articles.forEach((article) => {
-  //           expect(article).toContainKeys(["comment_count"]);
-  //         });
-  //       });
-  //   });
-  //   test("FEATURE REQUEST: STATUS 200: Accepts 'sort_by' query. Queries - ['created_at', 'VOTES', 'article_id', 'author']", () => {
-  //     return request(app)
-  //       .get("/api/articles?sort_by=votes")
-  //       .expect(200)
-  //       .then(({ body: { articles } }) => {
-  //         expect(articles).toBeSortedBy("votes", {
-  //           descending: true,
-  //         });
-  //         articles.forEach((article) => {
-  //           expect(article).toContainKeys([
-  //             "article_id",
-  //             "title",
-  //             "author",
-  //             "topic",
-  //             "created_at",
-  //             "votes",
-  //             "comment_count",
-  //           ]);
-  //         });
-  //       });
-  //   });
-  //   test("FEATURE REQUEST: STATUS 200: Accepts 'sort_by' query. Queries - Regardless of case ['created_at', 'votes', 'article_id', 'AUTHOR']", () => {
-  //     return request(app)
-  //       .get("/api/articles?sort_by=AUTHOR")
-  //       .expect(200)
-  //       .then(({ body: { articles } }) => {
-  //         expect(articles).toBeSortedBy("author", {
-  //           descending: true,
-  //         });
-  //         articles.forEach((article) => {
-  //           expect(article).toContainKeys([
-  //             "article_id",
-  //             "title",
-  //             "author",
-  //             "topic",
-  //             "created_at",
-  //             "votes",
-  //             "comment_count",
-  //           ]);
-  //         });
-  //       });
-  //   });
-  //   test("FEATURE REQUEST: STATUS 200: Accepts 'order' query. Queries - Ascending or decsending. (Decsending by default)", () => {
-  //     return request(app)
-  //       .get("/api/articles?sort_by=article_id&order=asc")
-  //       .expect(200)
-  //       .then(({ body: { articles } }) => {
-  //         expect(articles).toBeSortedBy("article_id");
-  //         articles.forEach((article) => {
-  //           expect(article).toContainKeys([
-  //             "article_id",
-  //             "title",
-  //             "author",
-  //             "topic",
-  //             "created_at",
-  //             "votes",
-  //             "comment_count",
-  //           ]);
-  //         });
-  //       });
-  //   });
-  //   test("FEATURE REQUEST: STATUS 200: Accepts 'topic'. Queries - 'mitch', 'paper' & 'cats'", () => {
-  //     return request(app)
-  //       .get("/api/articles?topic=mitch")
-  //       .expect(200)
-  //       .then(({ body: { articles } }) => {
-  //         articles.forEach((article) => {
-  //           expect(article).toContainKeys([
-  //             "article_id",
-  //             "title",
-  //             "author",
-  //             "topic",
-  //             "created_at",
-  //             "votes",
-  //             "comment_count",
-  //           ]);
-  //           expect(article.topic).toBe("mitch");
-  //         });
-  //       });
-  //   });
+  describe("GET /api/articles", () => {
+    test("STATUS 200: Sends back array of article objects in DESCENDING DATE ORDER. Each object contains the correct keys. (Endpoint accept QUERY: sort_by: DATE in ASC/DESC order.  Sort_by DATE in DESC order, is the DEFAULT status)", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeArray();
+          expect(articles).toBeSortedBy("created_at", {
+            descending: true,
+          });
+          articles.forEach((article) => {
+            expect(article).toContainKeys([
+              "article_id",
+              "title",
+              "author",
+              "topic",
+              "created_at",
+              "votes",
+            ]);
+          });
+        });
+    });
+    // test("FEATURE REQUEST - ADD COMMENT COUNT: STATUS 200: Returns comment count into return object array", () => {
+    //   return request(app)
+    //     .get("/api/articles")
+    //     .expect(200)
+    //     .then(({ body: { articles } }) => {
+    //       expect(articles).toBeArray();
+    //       articles.forEach((article) => {
+    //         expect(article).toContainKeys(["comment_count"]);
+    //       });
+    //     });
+    // });
+    // test("FEATURE REQUEST: STATUS 200: Accepts 'sort_by' query. Queries - ['created_at', 'VOTES', 'article_id', 'author']", () => {
+    //   return request(app)
+    //     .get("/api/articles?sort_by=votes")
+    //     .expect(200)
+    //     .then(({ body: { articles } }) => {
+    //       expect(articles).toBeSortedBy("votes", {
+    //         descending: true,
+    //       });
+    //       articles.forEach((article) => {
+    //         expect(article).toContainKeys([
+    //           "article_id",
+    //           "title",
+    //           "author",
+    //           "topic",
+    //           "created_at",
+    //           "votes",
+    //           "comment_count",
+    //         ]);
+    //       });
+    //     });
+    // });
+    // test("FEATURE REQUEST: STATUS 200: Accepts 'sort_by' query. Queries - Regardless of case ['created_at', 'votes', 'article_id', 'AUTHOR']", () => {
+    //   return request(app)
+    //     .get("/api/articles?sort_by=AUTHOR")
+    //     .expect(200)
+    //     .then(({ body: { articles } }) => {
+    //       expect(articles).toBeSortedBy("author", {
+    //         descending: true,
+    //       });
+    //       articles.forEach((article) => {
+    //         expect(article).toContainKeys([
+    //           "article_id",
+    //           "title",
+    //           "author",
+    //           "topic",
+    //           "created_at",
+    //           "votes",
+    //           "comment_count",
+    //         ]);
+    //       });
+    //     });
+    // });
+    // test("FEATURE REQUEST: STATUS 200: Accepts 'order' query. Queries - Ascending or decsending. (Decsending by default)", () => {
+    //   return request(app)
+    //     .get("/api/articles?sort_by=article_id&order=asc")
+    //     .expect(200)
+    //     .then(({ body: { articles } }) => {
+    //       expect(articles).toBeSortedBy("article_id");
+    //       articles.forEach((article) => {
+    //         expect(article).toContainKeys([
+    //           "article_id",
+    //           "title",
+    //           "author",
+    //           "topic",
+    //           "created_at",
+    //           "votes",
+    //           "comment_count",
+    //         ]);
+    //       });
+    //     });
+    // });
+    // test("FEATURE REQUEST: STATUS 200: Accepts 'topic'. Queries - 'mitch', 'paper' & 'cats'", () => {
+    //   return request(app)
+    //     .get("/api/articles?topic=mitch")
+    //     .expect(200)
+    //     .then(({ body: { articles } }) => {
+    //       articles.forEach((article) => {
+    //         expect(article).toContainKeys([
+    //           "article_id",
+    //           "title",
+    //           "author",
+    //           "topic",
+    //           "created_at",
+    //           "votes",
+    //           "comment_count",
+    //         ]);
+    //         expect(article.topic).toBe("mitch");
+    //       });
+    //     });
+    // });
 
-  // test.only("FEATURE REQUEST: STATUS 400: Unaccepted 'sort_by' query.", () => {
-  //   return request(app)
-  //     .get("/api/articles?sort_by=UNACCEPTED-SORT-BY-QUERY")
-  //     .expect(200)
-  //     .then(({ body: { articles } }) => {
-  //       expect(articles).toBeSortedBy("votes", {
-  //         descending: true,
-  //       });
-  //       articles.forEach((article) => {
-  //         expect(article).toContainKeys([
-  //           "article_id",
-  //           "title",
-  //           "author",
-  //           "topic",
-  //           "created_at",
-  //           "votes",
-  //           "comment_count",
-  //         ]);
-  //       });
-  //     });
-  // });
-  // });
+    // test.only("FEATURE REQUEST: STATUS 400: Unaccepted 'sort_by' query.", () => {
+    //   return request(app)
+    //     .get("/api/articles?sort_by=UNACCEPTED-SORT-BY-QUERY")
+    //     .expect(200)
+    //     .then(({ body: { articles } }) => {
+    //       expect(articles).toBeSortedBy("votes", {
+    //         descending: true,
+    //       });
+    //       articles.forEach((article) => {
+    //         expect(article).toContainKeys([
+    //           "article_id",
+    //           "title",
+    //           "author",
+    //           "topic",
+    //           "created_at",
+    //           "votes",
+    //           "comment_count",
+    //         ]);
+    //       });
+    //     });
+    // });
+  });
   describe("GET /api/articles/:article_id", () => {
     test("STATUS 200: Sends back object with correct keys and values. { article_id: { article data } }", () => {
       return request(app)

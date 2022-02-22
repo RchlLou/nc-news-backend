@@ -19,7 +19,6 @@ exports.getArticles = (req, res, next) => {
 
   retrieveArticles(sortBy, order, topic)
     .then((articles) => {
-      console.log("hello");
       res.status(200).send({ articles });
     })
     .catch(next);

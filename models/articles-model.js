@@ -6,41 +6,35 @@ exports.retrieveArticles = async (sortBy, order, topic) => {
   const sortByGreenList = ["created_at", "votes", "article_id", "author"];
   const orderGreenList = ["asc", "desc"];
   const topicsGreenList = ["mitch", "cats", "paper"];
+  let topicsQuery = undefined;
 
+  const sortByQuery = await checkSafety(sortBy, sortByGreenList);
+  const orderQuery = await checkSafety(order, orderGreenList);
+
+  if (topic !== undefined) {
+    topicsQuery = await checkSafety(topic, topicsGreenList);
+  }
+
+  let statement = `SELECT articles.article_id, articles.title, articles.author, articles.topic, articles.created_at, articles.votes, COUNT (comments.article_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+
+  if (topicsQuery !== undefined) {
+    statement += `WHERE articles.topic ILIKE '${topicsQuery}' `;
+  }
+
+  statement += `GROUP BY articles.article_id ORDER BY ${sortByQuery} ${orderQuery};`;
+
+  const result = await db.query(statement);
+  return result.rows;
+
+  // Check for SQL Injection
   async function checkSafety(query, greenList) {
     const isGreenListed = greenList.find((element) => {
       return element === query.toLowerCase();
     });
-    console.log(isGreenListed);
     if (isGreenListed === undefined) {
       return Promise.reject({ status: 400, msg: `${query} is not accepted` });
     }
-
     return isGreenListed;
-  }
-
-  const sortByQuery = await checkSafety(sortBy, sortByGreenList);
-  const orderQuery = await checkSafety(order, orderGreenList);
-  const topicsQuery = await checkSafety(topic, topicsGreenList);
-
-  console.log(sortByQuery);
-  console.log(orderQuery);
-  console.log(topicsQuery);
-
-  const withTopicsresult = await db.query(
-    `SELECT articles.article_id, articles.title, articles.author, articles.topic, articles.created_at, articles.votes, COUNT (comments.article_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.topic ILIKE '${topicsQuery}' GROUP BY articles.article_id ORDER BY ${sortByQuery} ${orderQuery};`
-  );
-
-  const withoutTopicsresult = await db.query(
-    `SELECT articles.article_id, articles.title, articles.author, articles.topic, articles.created_at, articles.votes, COUNT (comments.article_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY ${sortByQuery} ${orderQuery};`
-  );
-  console.log(withoutTopicsresult);
-  if (topicsQuery === undefined) {
-    console.log(withoutTopicsresult.rows);
-    return withoutTopicsresult.rows;
-  } else {
-    console.log(withTopicsresult.rows);
-    return withTopicsresult.rows;
   }
 };
 
@@ -65,3 +59,14 @@ exports.alterArticle = async (incVotes, articleId) => {
 
   return result.rows[0];
 };
+
+// const withTopicsresult = await db.query(
+//   `SELECT articles.article_id, articles.title, articles.author, articles.topic, articles.created_at, articles.votes, COUNT (comments.article_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.topic ILIKE '${topicsQuery}' GROUP BY articles.article_id ORDER BY ${sortByQuery} ${orderQuery};`
+// );
+
+// console.log(withoutTopicsresult);
+//   if (topicsQuery === undefined) {
+//     console.log(withoutTopicsresult.rows);
+//     return withoutTopicsresult.rows;
+//   } else {
+//     console.log(withTopicsresult.rows);

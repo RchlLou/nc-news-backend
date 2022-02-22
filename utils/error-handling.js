@@ -2,24 +2,6 @@ exports.handlePathNotFound = (req, res) => {
   res.status(404).send({ msg: "Endpoint not found" });
 };
 
-// 406 - NOT ACCEPTABLE - 'Invalid input', ie article = "NOT-AN-ID"
-exports.handlePsqlErrors406 = (err, req, res, next) => {
-  if (err.code === "22P02") {
-    // console.log("406" + " " + err.code);
-    res.status(406).send({ msg: "Invalid input" });
-  } else {
-    next(err);
-  }
-};
-
-// 411 - INPUT REQUIRED - Length required!
-exports.handlePsqlError411 = (err, req, res, next) => {
-  if (err.code === "23502") {
-    // console.log("411" + " " + err.code);
-    res.status(411).send({ msg: `Input is required` });
-  }
-};
-
 // 416 - INPUT REQUIRED - Request Range Not Satisfiable
 exports.handlePsqlError416 = (err, req, res, next) => {
   if (
@@ -55,6 +37,24 @@ exports.handlePsqlError404 = (err, req, res, next) => {
     res.status(404).send({ msg: "Article cannot be found" });
   } else {
     next(err);
+  }
+};
+
+// 406 - NOT ACCEPTABLE - 'Invalid input', ie article = "NOT-AN-ID"
+exports.handlePsqlErrors406 = (err, req, res, next) => {
+  if (err.code === "22P02") {
+    // console.log("406" + " " + err.code);
+    res.status(406).send({ msg: "Invalid input" });
+  } else {
+    next(err);
+  }
+};
+
+// 411 - INPUT REQUIRED - Length required!
+exports.handlePsqlError411 = (err, req, res, next) => {
+  if (err.code === "23502") {
+    // console.log("411" + " " + err.code);
+    res.status(411).send({ msg: `Input is required` });
   }
 };
 

@@ -55,9 +55,9 @@ app.use(handlePsqlError416);
 
 app.use(handlePsqlError400);
 
-app.use(handlePsqlErrors406);
-
 app.use(handlePsqlError404);
+
+app.use(handlePsqlErrors406);
 
 app.use(handlePsqlError411);
 
