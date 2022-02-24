@@ -35,7 +35,7 @@ describe("TOPIC ENDPOINTS", () => {
 });
 describe("ARTICLE ENDPOINTS", () => {
   describe("GET /api/articles", () => {
-    test("STATUS 200: Sends back array of article objects in DESCENDING DATE ORDER. Each object contains the correct keys. (Endpoint accept QUERY: sort_by: DATE in ASC/DESC order.  Sort_by DATE in DESC order, is the DEFAULT status)", () => {
+    test("STATUS 200: Sends back array of article objects in DESCENDING DATE ORDER. Tests default options - Sorted by created_at in desc order.)", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
@@ -56,119 +56,173 @@ describe("ARTICLE ENDPOINTS", () => {
           });
         });
     });
-    // test("FEATURE REQUEST - ADD COMMENT COUNT: STATUS 200: Returns comment count into return object array", () => {
-    //   return request(app)
-    //     .get("/api/articles")
-    //     .expect(200)
-    //     .then(({ body: { articles } }) => {
-    //       expect(articles).toBeArray();
-    //       articles.forEach((article) => {
-    //         expect(article).toContainKeys(["comment_count"]);
-    //       });
-    //     });
-    // });
-    // test("FEATURE REQUEST: STATUS 200: Accepts 'sort_by' query. Queries - ['created_at', 'VOTES', 'article_id', 'author']", () => {
-    //   return request(app)
-    //     .get("/api/articles?sort_by=votes")
-    //     .expect(200)
-    //     .then(({ body: { articles } }) => {
-    //       expect(articles).toBeSortedBy("votes", {
-    //         descending: true,
-    //       });
-    //       articles.forEach((article) => {
-    //         expect(article).toContainKeys([
-    //           "article_id",
-    //           "title",
-    //           "author",
-    //           "topic",
-    //           "created_at",
-    //           "votes",
-    //           "comment_count",
-    //         ]);
-    //       });
-    //     });
-    // });
-    // test("FEATURE REQUEST: STATUS 200: Accepts 'sort_by' query. Queries - Regardless of case ['created_at', 'votes', 'article_id', 'AUTHOR']", () => {
-    //   return request(app)
-    //     .get("/api/articles?sort_by=AUTHOR")
-    //     .expect(200)
-    //     .then(({ body: { articles } }) => {
-    //       expect(articles).toBeSortedBy("author", {
-    //         descending: true,
-    //       });
-    //       articles.forEach((article) => {
-    //         expect(article).toContainKeys([
-    //           "article_id",
-    //           "title",
-    //           "author",
-    //           "topic",
-    //           "created_at",
-    //           "votes",
-    //           "comment_count",
-    //         ]);
-    //       });
-    //     });
-    // });
-    // test("FEATURE REQUEST: STATUS 200: Accepts 'order' query. Queries - Ascending or decsending. (Decsending by default)", () => {
-    //   return request(app)
-    //     .get("/api/articles?sort_by=article_id&order=asc")
-    //     .expect(200)
-    //     .then(({ body: { articles } }) => {
-    //       expect(articles).toBeSortedBy("article_id");
-    //       articles.forEach((article) => {
-    //         expect(article).toContainKeys([
-    //           "article_id",
-    //           "title",
-    //           "author",
-    //           "topic",
-    //           "created_at",
-    //           "votes",
-    //           "comment_count",
-    //         ]);
-    //       });
-    //     });
-    // });
-    // test("FEATURE REQUEST: STATUS 200: Accepts 'topic'. Queries - 'mitch', 'paper' & 'cats'", () => {
-    //   return request(app)
-    //     .get("/api/articles?topic=mitch")
-    //     .expect(200)
-    //     .then(({ body: { articles } }) => {
-    //       articles.forEach((article) => {
-    //         expect(article).toContainKeys([
-    //           "article_id",
-    //           "title",
-    //           "author",
-    //           "topic",
-    //           "created_at",
-    //           "votes",
-    //           "comment_count",
-    //         ]);
-    //         expect(article.topic).toBe("mitch");
-    //       });
-    //     });
-    // });
-
-    // test.only("FEATURE REQUEST: STATUS 400: Unaccepted 'sort_by' query.", () => {
-    //   return request(app)
-    //     .get("/api/articles?sort_by=UNACCEPTED-SORT-BY-QUERY")
-    //     .expect(200)
-    //     .then(({ body: { articles } }) => {
-    //       expect(articles).toBeSortedBy("votes", {
-    //         descending: true,
-    //       });
-    //       articles.forEach((article) => {
-    //         expect(article).toContainKeys([
-    //           "article_id",
-    //           "title",
-    //           "author",
-    //           "topic",
-    //           "created_at",
-    //           "votes",
-    //           "comment_count",
-    //         ]);
-    //       });
-    //     });
-    // });
+    test("FEATURE REQUEST - ADD COMMENT COUNT: STATUS 200: Returns comment count into return object array", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeArray();
+          articles.forEach((article) => {
+            expect(article).toContainKeys(["comment_count"]);
+          });
+        });
+    });
+    test("FEATURE REQUEST: STATUS 200: Accepts 'sort_by' query. Queries - ['created_at' (default), 'VOTES', 'article_id', 'author']", () => {
+      return request(app)
+        .get("/api/articles?sort_by=votes")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("votes", {
+            descending: true,
+          });
+          articles.forEach((article) => {
+            expect(article).toContainKeys([
+              "article_id",
+              "title",
+              "author",
+              "topic",
+              "created_at",
+              "votes",
+              "comment_count",
+            ]);
+          });
+        });
+    });
+    test("FEATURE REQUEST: STATUS 200: Accepts UPPERCASE queries", () => {
+      return request(app)
+        .get("/API/ARTICLES?SORT_BY=AUTHOR")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("author", {
+            descending: true,
+          });
+          articles.forEach((article) => {
+            expect(article).toContainKeys([
+              "article_id",
+              "title",
+              "author",
+              "topic",
+              "created_at",
+              "votes",
+              "comment_count",
+            ]);
+          });
+        });
+    });
+    test("FEATURE REQUEST: STATUS 200: Accepts 'order' query. Queries - Ascending or decsending. Utilsing all 3 query sectors", () => {
+      return request(app)
+        .get("/api/articles?sort_by=article_id&order=asc")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("article_id");
+          articles.forEach((article) => {
+            expect(article).toContainKeys([
+              "article_id",
+              "title",
+              "author",
+              "topic",
+              "created_at",
+              "votes",
+              "comment_count",
+            ]);
+          });
+        });
+    });
+    test("FEATURE REQUEST: STATUS 200: Accepts 'topic'. Queries - 'mitch', 'paper' & 'cats'", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          articles.forEach((article) => {
+            expect(article).toContainKeys([
+              "article_id",
+              "title",
+              "author",
+              "topic",
+              "created_at",
+              "votes",
+              "comment_count",
+            ]);
+            expect(article.topic).toBe("mitch");
+          });
+        });
+    });
+    test("FEATURE REQUEST: STATUS 200: Accepts 'order' query. Queries - Ascending or decsending. Utilsing all 3 query sectors", () => {
+      return request(app)
+        .get("/api/articles?sort_by=article_id&order=asc&topic=mitch")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toBeSortedBy("article_id");
+          articles.forEach((article) => {
+            expect(article).toContainKeys([
+              "article_id",
+              "title",
+              "author",
+              "topic",
+              "created_at",
+              "votes",
+              "comment_count",
+            ]);
+            expect.objectContaining({
+              topic: "mitch",
+            });
+          });
+        });
+    });
+    test("FEATURE REQUEST: STATUS 200: Unaccepted query defaults", () => {
+      return request(app).get("/api/articles?UNACCEPTED=mitch").expect(200);
+    });
+    test("FEATURE REQUEST: STATUS 200: Accepts 'topic'. Queries - 'mitch', 'paper' & 'cats'", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          articles.forEach((article) => {
+            expect(article).toContainKeys([
+              "article_id",
+              "title",
+              "author",
+              "topic",
+              "created_at",
+              "votes",
+              "comment_count",
+            ]);
+            expect(article.topic).toBe("mitch");
+          });
+        });
+    });
+    test("FEATURE REQUEST: STATUS 200: Tests empty topic'", () => {
+      return request(app)
+        .get("/api/articles?topic=paper")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toHaveLength(0);
+        });
+    });
+    test("FEATURE REQUEST: STATUS 400: Unaccepted 'sort_by' query.", () => {
+      return request(app)
+        .get("/api/articles?sort_by=UNACCEPTED-QUERY")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("unaccepted-query is not accepted");
+        });
+    });
+    test("FEATURE REQUEST: STATUS 400: Unaccepted 'order' query.", () => {
+      return request(app)
+        .get("/api/articles?order=UNACCEPTED")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("unaccepted is not accepted");
+        });
+    });
+    test("FEATURE REQUEST: STATUS 400: Unaccepted 'topic' query.", () => {
+      return request(app)
+        .get("/api/articles?topic=UNACCEPTED")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("unaccepted is not accepted");
+        });
+    });
   });
   describe("GET /api/articles/:article_id", () => {
     test("STATUS 200: Sends back object with correct keys and values. { article_id: { article data } }", () => {
@@ -292,7 +346,6 @@ describe("ARTICLE ENDPOINTS", () => {
     });
   });
 });
-
 describe("COMMENTS ENDPOINT", () => {
   describe("GET /api/articles/:article_id/comments", () => {
     test("STAUTS 200: Sends { articleComments: [ {comment_object}, {comment_object} ] }", () => {

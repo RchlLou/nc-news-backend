@@ -28,6 +28,8 @@ const {
   deleteComment,
 } = require("./controllers/comments-controller");
 
+const { welcome } = require("./controllers/welcome.controller");
+
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
@@ -45,6 +47,9 @@ app.patch("/api/articles/:article_id", updateArticle);
 app.post("/api/articles/:article_id/comments", postComment);
 
 app.delete("/api/comments/:comment_id", deleteComment);
+
+app.get("/api", welcome);
+// test??
 
 app.all("/*", handlePathNotFound);
 

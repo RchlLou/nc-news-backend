@@ -3,6 +3,7 @@ exports.handlePathNotFound = (req, res) => {
 };
 
 // 416 - INPUT REQUIRED - Request Range Not Satisfiable
+// noInput = undefined
 exports.handlePsqlError416 = (err, req, res, next) => {
   if (
     err.code === "23503" &&
@@ -17,7 +18,7 @@ exports.handlePsqlError416 = (err, req, res, next) => {
   }
 };
 
-// 400 - ERROR IN INPUT OBJECT
+// 400 - ERROR IN INPUT
 exports.handlePsqlError400 = (err, req, res, next) => {
   if (err.code === "23503" && err.constraint === "comments_author_fkey") {
     // console.log("400" + " " + err.code);

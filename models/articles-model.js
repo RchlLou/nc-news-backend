@@ -6,11 +6,11 @@ exports.retrieveArticles = async (sortBy, order, topic) => {
   const sortByGreenList = ["created_at", "votes", "article_id", "author"];
   const orderGreenList = ["asc", "desc"];
   const topicsGreenList = ["mitch", "cats", "paper"];
-  let topicsQuery = undefined;
 
   const sortByQuery = await checkSafety(sortBy, sortByGreenList);
   const orderQuery = await checkSafety(order, orderGreenList);
 
+  let topicsQuery = undefined;
   if (topic !== undefined) {
     topicsQuery = await checkSafety(topic, topicsGreenList);
   }
@@ -20,7 +20,6 @@ exports.retrieveArticles = async (sortBy, order, topic) => {
   if (topicsQuery !== undefined) {
     statement += `WHERE articles.topic ILIKE '${topicsQuery}' `;
   }
-
   statement += `GROUP BY articles.article_id ORDER BY ${sortByQuery} ${orderQuery};`;
 
   const result = await db.query(statement);
@@ -59,14 +58,3 @@ exports.alterArticle = async (incVotes, articleId) => {
 
   return result.rows[0];
 };
-
-// const withTopicsresult = await db.query(
-//   `SELECT articles.article_id, articles.title, articles.author, articles.topic, articles.created_at, articles.votes, COUNT (comments.article_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.topic ILIKE '${topicsQuery}' GROUP BY articles.article_id ORDER BY ${sortByQuery} ${orderQuery};`
-// );
-
-// console.log(withoutTopicsresult);
-//   if (topicsQuery === undefined) {
-//     console.log(withoutTopicsresult.rows);
-//     return withoutTopicsresult.rows;
-//   } else {
-//     console.log(withTopicsresult.rows);

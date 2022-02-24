@@ -5,9 +5,20 @@ const {
 } = require("../models/articles-model");
 
 exports.getArticles = (req, res, next) => {
-  let { sort_by: sortBy } = req.query;
-  let { order } = req.query;
-  let { topic } = req.query;
+  // Function to accept uppercase characters
+  const lowerCaseReqQuery = (reqQuery) => {
+    const queryEntries = Object.entries(req.query);
+    const lowerCaseQueryArr = queryEntries.map((entryPair) => {
+      return entryPair.map((element) => {
+        return element.toLowerCase();
+      });
+    });
+    return Object.fromEntries(lowerCaseQueryArr);
+  };
+
+  let { sort_by: sortBy } = lowerCaseReqQuery(req.query);
+  let { order } = lowerCaseReqQuery(req.query);
+  let { topic } = lowerCaseReqQuery(req.query);
 
   if (sortBy === undefined) {
     sortBy = "created_at";
