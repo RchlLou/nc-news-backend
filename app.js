@@ -28,6 +28,8 @@ const {
   deleteComment,
 } = require("./controllers/comments-controller");
 
+const { welcome } = require("./controllers/welcome.controller");
+
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
@@ -46,18 +48,19 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 app.delete("/api/comments/:comment_id", deleteComment);
 
+app.get("/api", welcome);
+
 app.all("/*", handlePathNotFound);
 
 app.use(handleCustomErrors);
 
-// 416 NEEDS TO BE BEFORE 400
 app.use(handlePsqlError416);
 
 app.use(handlePsqlError400);
 
-app.use(handlePsqlErrors406);
-
 app.use(handlePsqlError404);
+
+app.use(handlePsqlErrors406);
 
 app.use(handlePsqlError411);
 

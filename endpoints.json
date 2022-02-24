@@ -1,32 +1,36 @@
 {
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+    "description": "serves up a json representation of all the available endpoints of the api and responses"
   },
   "GET /api/topics": {
     "description": "serves an array of all topics",
-    "queries": [],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics sorted in DESCENDING order",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "description": "Default serves an array of all topics sorted by CREATED_AT in DESCENDING order",
+    "queries": [
+      {"sort_by" : ["created_at", "votes", "article_id", "author"]}, {"order": ["asc", "desc"]}, 
+      {"topic":["mitch", "cats", "paper"]}
+    ],
     "exampleResponse": {
       "articles": [
         {
-          "title": "Seafood substitutions are increasing",
-          "topic": "cooking",
           "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": 1527695953341
+          "title": "Seafood substitutions are increasing",
+          "article_id": "2",
+          "topic": "cats",
+          "votes": "222",
+          "created_at": "2020-07-10T04:11:00.000Z",
+          "comment_count": "20"
         }
       ]
     }
   },
   "GET /api/articles/:article_id": {
     "description": "serves the unique article as an object",
-    "query": "article_id: 1",
+    "req.params": "article_id: 1",
     "exampleResponse":  {
       "article": 
         {
@@ -36,34 +40,74 @@
           "body": "I find this existence...",
           "topic": "mitch",
           "created_at": "2020-07-09T21:11:00.000Z",
-          "votes": 100,
-          "comment_count": 10
+          "votes": "100",
+          "comment_count": "10"
         }
     }
   },
   "PATCH /api/articles/:article_id": {
     "description": "updates votes key and serves back article ID data",
-    "query": { "inc_votes" : 1 },
+    "req.body": { "inc_votes" : 1 },
     "exampleResponse":  {
       "updatedArticle":
         {
           "article_id": 1,
           "title": "Living in the shadow of a great man",
-          "body": "I find this existence challenging",
-          "votes": 101,
-          "topic": "mitch",
           "author": "butter_bridge",
-          "created_at": "2020-07-10T04:11:00.000Z",
-          "comment_count": 11
+          "body": "I find this existence challenging",
+          "votes": "101",
+          "topic": "mitch",
+          "created_at": "2020-07-10T04:11:00.000Z"
         }
     }  
+  },
+  "GET /api/users": {
+    "description": "serves array of users.",
+    "exampleResponse":  {
+      "users":
+      [
+        {
+          "username": "icellusedkars"
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves array of comments of the unique article ID's comments.  Provides an empty array if article has no comments.",
+    "req.params": {"article_id" : "2"},
+    "exampleResponse":  {
+      "articleComments":[
+        {
+          "comment_id": "3",
+          "votes":"100",
+          "created_at":"2020-07-09T21:11:00.000Z",
+          "author":"butter_bridge",
+          "body": "I find this existence..."
+        }
+      ]
+    }  
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "serves array of comments of the unique article ID's comments.  Provides an empty array if article has no comments.",
+    "req.params" : { "article_id": "1"},
+    "req.body" : {"username": "butter_bridge" , "body": "A lovely comment"},
+    "exampleResponse":  {
+      "articleComments":[
+        {
+          "comment_id": "3",
+          "votes":"100",
+          "created_at":"2020-07-09T21:11:00.000Z",
+          "author":"butter_bridge",
+          "body": "I find this existence..."
+        }
+      ]
+    }  
+  },
+  "DELETE /api/comments/:comment_id": {
+    "req.params": {"comment_id": 1},
+    "description": "Deletes the unique comment attached to an article",
+    "exampleResponse":  { "msg" : "204"}
   }
-
-
-
-
-
-  
 }
 
 
