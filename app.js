@@ -49,13 +49,11 @@ app.post("/api/articles/:article_id/comments", postComment);
 app.delete("/api/comments/:comment_id", deleteComment);
 
 app.get("/api", welcome);
-// test??
 
 app.all("/*", handlePathNotFound);
 
 app.use(handleCustomErrors);
 
-// 416 NEEDS TO BE BEFORE 400
 app.use(handlePsqlError416);
 
 app.use(handlePsqlError400);

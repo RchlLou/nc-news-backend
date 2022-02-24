@@ -546,6 +546,19 @@ describe("USER ENDPOINTS", () => {
   });
 });
 
+describe("WELCOME ENDPOINT", () => {
+  describe("GET /api", () => {
+    test("Status 200: Sends endpoints.json", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toEqual(require("../endpoints.json"));
+        });
+    });
+  });
+});
+
 describe("GLOBAL ERRORS", () => {
   test("STATUS 404: Tests unrecognised endpoints and responds with appropraite message", () => {
     return request(app)
