@@ -4,6 +4,9 @@ Written in JavaScript, this is the backend of a news app that allows users to in
 
 In summary, there is a set number of articles that comments can be posted to and articles can be voted on.
 
+> GitHub repo: https://github.com/RchlLou/nc-news-fullstack-project.git
+> DEeployed on Heroku: https://nc-news-app-feb2022.herokuapp.com/
+
 PROJECT DEPENDENCIES...
 
 - Developer's versions listed.
@@ -31,12 +34,9 @@ TO USE...
 
 - After cloning from https://github.com/RchlLou/nc-news-fullstack-project, open in code editor.
 
-> Run 'npm i' to install node packages.
-> npm i express
-> npm i pg-format
-> npm i dotenv
-> npm i pg
-> npm i pg-format
+```
+Run 'npm i' to install node packages.
+```
 
 - If requiring developer testing dependencies, install
   > npm i jest -D

@@ -5,16 +5,11 @@ const {
   formatComments,
 } = require("../helpers/utils");
 const db = require("../connection");
-const data = require("../data/index");
-
-const { topicData, userData, articleData, commentData } = data;
-
 const { dropTables, createTables } = require("../helpers/manage-tables");
 
-const seed = async (data) => {
+const seed = async ({ topicData, userData, articleData, commentData }) => {
   await dropTables();
   await createTables();
-
   const insertTopicsQueryStr = format(
     "INSERT INTO topics (slug, description) VALUES %L RETURNING *;",
     topicData.map(({ slug, description }) => [slug, description])
