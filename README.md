@@ -13,7 +13,7 @@ PROJECT DEPENDENCIES...
 
 > Node js: v17.0.1
 > Express: V4.17.2 - Web framework for Node.js, used for the API Server.
-> PostgreSQLpost: V12.9 - Open source, object-relational, database system.
+> PostgreSQL: V12.9 - Open source, object-relational, database system.
 > PG-Format: V1.0.4 - Safely create dynamic SQL queries.
 > Node Postgres: V8.7.3 - Collection of Node modules for interfacing with PostgreSQL database.
 > Dotenv: V16.0.0 - Loads environment variables from a .env file into process.env.
