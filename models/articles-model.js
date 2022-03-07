@@ -5,7 +5,14 @@ const { testFor404Error } = require("../utils/error-handling");
 exports.retrieveArticles = async (sortBy, order, topic) => {
   const sortByGreenList = ["created_at", "votes", "article_id", "author"];
   const orderGreenList = ["asc", "desc"];
-  const topicsGreenList = ["mitch", "cats", "paper"]; // only
+  const topicsGreenList = [
+    "mitch",
+    "cats",
+    "paper",
+    "coding",
+    "football",
+    "cooking",
+  ];
 
   const sortByQuery = await checkSafety(sortBy, sortByGreenList);
   const orderQuery = await checkSafety(order, orderGreenList);

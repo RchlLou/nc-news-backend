@@ -1,3 +1,4 @@
+const cors = require("cors");
 const express = require("express");
 const app = express();
 
@@ -30,6 +31,7 @@ const {
 
 const { welcome } = require("./controllers/welcome.controller");
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
